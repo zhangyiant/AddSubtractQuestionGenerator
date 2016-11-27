@@ -6,9 +6,9 @@ def generate_question():
     generated = False
     question_string = ""
     result = 0
-    while (not generated):
-        a = random.randint(1,10)
-        b = random.randint(1,10)
+    while not generated:
+        a = random.randint(0,10)
+        b = random.randint(0,10)
         operator = random.randint(1,2)
         if operator == 1:
             result = a + b
@@ -23,7 +23,7 @@ def generate_question():
     return question_string
 
 f = open("questions.txt", "w")
-for i in range(1,51):
+for i in range(1,59):
     q = generate_question()
-    f.write("{0:2d}: {1}\n".format(i, q))
+    f.write("{1}\n".format(i, q))
 f.close()
