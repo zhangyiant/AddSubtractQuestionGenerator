@@ -7,8 +7,8 @@ def generate_question():
     question_string = ""
     result = 0
     while not generated:
-        a = random.randint(0,10)
-        b = random.randint(0,10)
+        a = random.randint(0,20)
+        b = random.randint(0,20)
         operator = random.randint(1,2)
         if operator == 1:
             result = a + b
