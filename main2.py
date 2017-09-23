@@ -8,32 +8,32 @@ def generate_question():
     question_string = ""
     result = 0
     while not generated:
-        a = random.randint(1, 100)
-        b = random.randint(1, 100)
-        c = random.randint(1, 100)
+        a = random.randint(1, 1000)
+        b = random.randint(1, 1000)
+        c = random.randint(1, 1000)
         operator = random.randint(1, 2)
         if operator == 1:
             result = a + b
-            question_string = "{0:2d} + {1:2d}".format(a, b)
+            question_string = "{0:3d} + {1:3d}".format(a, b)
         elif operator == 2:
             result = a - b
-            question_string = "{0:2d} - {1:2d}".format(a, b)
+            question_string = "{0:3d} - {1:3d}".format(a, b)
         else:
             raise Exception("Unknown error when generating questions!")
-        if (result >= 0) and (result <= 100):
+        if (result >= 0) and (result <= 1000):
             pass
         else:
             continue
         operator = random.randint(1, 2)
         if operator == 1:
             result = result + c
-            question_string += " + {0:2d} =".format(c)
+            question_string += " + {0:3d} =".format(c)
         elif operator == 2:
             result = result - c
-            question_string += " - {0:2d} =".format(c)
+            question_string += " - {0:3d} =".format(c)
         else:
             raise Exception("Unknown error when generating questions!")
-        if (result >= 0) and (result <= 100):
+        if (result >= 0) and (result <= 1000):
             generated = True
         else:
             continue
