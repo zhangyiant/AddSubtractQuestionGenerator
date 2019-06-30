@@ -4,9 +4,10 @@ from pygame.sprite import (
     Sprite,
     RenderPlain)
 from main import generate_question
+import datetime
 
 pygame.init()
-screen = pygame.display.set_mode((1200, 480))
+screen = pygame.display.set_mode((1440, 480))
 pygame.mouse.set_visible(0)
 
 background = pygame.Surface(screen.get_size())
@@ -18,16 +19,23 @@ state = "Initial"
 class TimeSprite(Sprite):
     def __init__(self):
         Sprite.__init__(self)
-        global time_used
+        global start_time
+        current_time = datetime.datetime.now()
+        time_delta = current_time - start_time
+        seconds_str = str(time_delta.total_seconds())
         self.font = pygame.font.Font(None, 72)
-        text = "{0}".format(time_used)
+        text = seconds_str
         self.image = self.font.render(text, 1, (10, 10, 10))
         self.rect = self.image.get_rect(centerx=background.get_width()/2)
         return
 
     def update(self):
-        global time_used
-        text = "{0}".format(time_used)
+        global start_time
+        current_time = datetime.datetime.now()
+        time_delta = current_time - start_time
+        seconds_str = str(time_delta.total_seconds())
+        self.font = pygame.font.Font(None, 72)
+        text = seconds_str
         self.image = self.font.render(text, 1, (10, 10, 10))
         self.rect = self.image.get_rect(centerx=background.get_width()/2)
         return
@@ -70,6 +78,8 @@ pygame.display.flip()
 
 time_used = 0
 clock = pygame.time.Clock()
+start_time = datetime.datetime.now(
+)
 
 time_sprite = TimeSprite()
 question_sprite = QuestionSprite()
@@ -80,27 +90,27 @@ wrong_img = pygame.image.load("wrong.png")
 answer = ""
 def process_key(event):
     global answer
-    if event.key == K_0:
+    if event.key == K_0 or event.key == K_KP0:
         answer += "0"
-    elif event.key == K_1:
+    elif event.key == K_1 or event.key == K_KP1:
         answer += "1"
-    elif event.key == K_2:
+    elif event.key == K_2 or event.key == K_KP2:
         answer += "2"
-    elif event.key == K_3:
+    elif event.key == K_3 or event.key == K_KP3:
         answer += "3"
-    elif event.key == K_4:
+    elif event.key == K_4 or event.key == K_KP4:
         answer += "4"
-    elif event.key == K_5:
+    elif event.key == K_5 or event.key == K_KP5:
         answer += "5"
-    elif event.key == K_6:
+    elif event.key == K_6 or event.key == K_KP6:
         answer += "6"
-    elif event.key == K_7:
+    elif event.key == K_7 or event.key == K_KP7:
         answer += "7"
-    elif event.key == K_8:
+    elif event.key == K_8 or event.key == K_KP8:
         answer += "8"
-    elif event.key == K_9:
+    elif event.key == K_9 or event.key == K_KP9:
         answer += "9"
-    elif event.key == K_RETURN:
+    elif event.key == K_RETURN or event.key == K_KP_ENTER:
         question_sprite.save_question(answer)
         question_sprite.change()
         answer = ""
@@ -122,10 +132,14 @@ while going:
         for event in pygame.event.get():
             if event.type == QUIT:
                 going = False
-            elif (event.type == KEYDOWN and event.key == K_RETURN):
+            elif (event.type == KEYDOWN and (event.key == K_RETURN or event.key == K_KP_ENTER)):
                 state = "Running"
+                start_time = datetime.datetime.now()
     elif state == "Running":
-        if time_used > 10000:
+        current_time = datetime.datetime.now()
+        time_delta = current_time - start_time
+        seconds = time_delta.total_seconds()
+        if seconds > 60:
             state = "Complete"
             continue
         for event in pygame.event.get():
@@ -190,5 +204,10 @@ while going:
         for event in pygame.event.get():
             if event.type == QUIT:
                 going = False
+            elif (event.type == KEYDOWN and event.key == K_RETURN):
+                state = "Initial"
+                answer = ""
+                question_sprite.reset()
+
 
 pygame.quit()
